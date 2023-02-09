@@ -22,7 +22,14 @@ void loop() {
   byte GREEN_STATE_BUTTON = digitalRead(GREEN_BUTTON_PIN);
   byte RED_STATE_BUTTON = digitalRead(RED_BUTTON_PIN);
 
-  
+      if (GREEN_STATE_BUTTON && RED_STATE_BUTTON == HIGH) {
+        if ( (millis() - lastDebounceTime) > debounceDelay) {
+        digitalWrite(GREEN_LED_PIN, LOW);
+        digitalWrite(RED_LED_PIN, LOW);
+        lastDebounceTime = millis();
+        }
+      }
+    
     if (GREEN_STATE_BUTTON != lastGreenState) {
       lastGreenState = GREEN_STATE_BUTTON;
       if ( (millis() - lastDebounceTime) > debounceDelay) {
