@@ -12,9 +12,9 @@ long lastDebounceTime = 0;  // the last time the output pin was toggled
 long debounceDelay = 50;    // the debounce time; increase if the output flickers
 
 void setup() {
-  pinMode(GREEN_BUTTON_PIN, INPUT);
+  pinMode(GREEN_BUTTON_PIN, INPUT_PULLDOWN);
   pinMode(GREEN_LED_PIN, OUTPUT);
-  pinMode(RED_BUTTON_PIN, INPUT);
+  pinMode(RED_BUTTON_PIN, INPUT_PULLDOWN);
   pinMode(RED_LED_PIN, OUTPUT);
 }
 
@@ -22,13 +22,6 @@ void loop() {
   byte GREEN_STATE_BUTTON = digitalRead(GREEN_BUTTON_PIN);
   byte RED_STATE_BUTTON = digitalRead(RED_BUTTON_PIN);
 
-  if (GREEN_STATE_BUTTON && RED_STATE_BUTTON == HIGH) {
-    if ( (millis() - lastDebounceTime) > debounceDelay) {
-    digitalWrite(GREEN_LED_PIN, LOW);
-    digitalWrite(RED_LED_PIN, LOW);
-    lastDebounceTime = millis();
-    }
-  }
 
   if (GREEN_STATE_BUTTON != lastGreenState) {
     lastGreenState = GREEN_STATE_BUTTON;
