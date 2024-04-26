@@ -1,0 +1,63 @@
+//This code is for the OR24 Shifting PCB
+const int UPSHIFT_INPUT_PIN = 15;   // button input pin
+const int UPSHIFT_OUTPUT_PIN = 2;      // button output pin
+const int DOWNSHIFT_INPUT_PIN = 13;   // button input pin
+const int DOWNSHIFT_OUTPUT_PIN = 12;       // button output pin
+
+byte UPSHIFT_OUTPUT_STATE = LOW;
+byte LAST_UPSHIFT_STATE = LOW;
+byte DOWNSHIFT_OUTPUT_STATE = LOW;
+byte LAST_DOWNSHIFT_STATE = LOW;
+
+long lastDebounceTime = 0;  // the last time the output pin was toggled
+long debounceDelay = 50;    // the debounce time; increase if the output flickers
+
+void setup() {
+  pinMode(UPSHIFT_INPUT_PIN, INPUT);
+  pinMode(UPSHIFT_OUTPUT_PIN, OUTPUT);
+  pinMode(DOWNSHIFT_INPUT_PIN, INPUT);
+  pinMode(DOWNSHIFT_OUTPUT_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+ byte UPSHIFT_INPUT_STATE = digitalRead(UPSHIFT_INPUT_PIN);
+  byte DOWNSHIFT_INPUT_STATE = digitalRead(DOWNSHIFT_INPUT_PIN);
+
+
+  if (UPSHIFT_INPUT_STATE != LAST_UPSHIFT_STATE) {
+    LAST_UPSHIFT_STATE = UPSHIFT_INPUT_STATE;
+    if ( (millis() - lastDebounceTime) > debounceDelay) {
+      if (UPSHIFT_INPUT_STATE == HIGH){
+        digitalWrite(UPSHIFT_OUTPUT_PIN, HIGH);
+        Serial.print("Up\n");
+        delay(50);
+        digitalWrite(UPSHIFT_OUTPUT_PIN, LOW);
+      }
+      else {
+        digitalWrite(UPSHIFT_OUTPUT_PIN, LOW);
+      }
+      lastDebounceTime = millis();
+    }else{
+      digitalWrite(UPSHIFT_OUTPUT_PIN, LOW);
+    }
+  }
+
+  if (DOWNSHIFT_INPUT_STATE != LAST_DOWNSHIFT_STATE) {
+    LAST_DOWNSHIFT_STATE = DOWNSHIFT_INPUT_STATE;
+    if ( (millis() - lastDebounceTime) > debounceDelay) {
+      if (DOWNSHIFT_INPUT_STATE == HIGH){
+        digitalWrite(DOWNSHIFT_OUTPUT_PIN, HIGH);
+        Serial.print("Down\n");
+        delay(50);
+        digitalWrite(DOWNSHIFT_OUTPUT_PIN, LOW);
+      }
+      else {
+        digitalWrite(DOWNSHIFT_OUTPUT_PIN, LOW);
+      }
+      lastDebounceTime = millis();
+    }else{
+      digitalWrite(DOWNSHIFT_OUTPUT_PIN, LOW);
+    }
+  }
+}
